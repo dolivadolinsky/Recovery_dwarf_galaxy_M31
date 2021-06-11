@@ -74,6 +74,7 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	xki_gal,eta_gal=np.array(radec_xkieta(ra_gal,dec_gal,ra_refc,dec_refc))*180/math.pi #Array which contains the xki/eta coordinates of each galaxy.
 	label=field_center_xkieta[:,0] #Array which contains all the fields number from 1 to 406.
 	position=np.zeros(len(xki_gal))+1 #Array which contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy in a masked field and 3 of the galaxy is in a hole of the survey.
+	d_M31=math.pow(10,(24.47+5)/5)/1000
 	
 	for j in range(0,len(xki_gal)):
 		if j%100==0: print('Finding the model parameters: %d/%d'%(j,len(xki_gal)))
@@ -106,8 +107,8 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#Determining the model parameters value at the distance of the galaxy d_gal:#
 	#############################################################################
 	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance.
-	Mv_0=Mv_lim_dM31+3.78*math.pow(10,-4)*d_gal 
-	alpha_0=alpha_lim_dM31+4.65*math.pow(10,-4)*d_gal
+	Mv_0=Mv_lim_dM31+3.78*math.pow(10,-4)*d_M31 
+	alpha_0=alpha_lim_dM31+4.65*math.pow(10,-4)*d_M31
 	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance of the galaxy d_gal
 	Mv_lim_dgal=-3.78*math.pow(10,-4)*d_gal+Mv_0
 	alpha_lim_dgal=-4.65*math.pow(10,-4)*d_gal+alpha_0

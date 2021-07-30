@@ -107,11 +107,11 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#Determining the model parameters value at the distance of the galaxy d_gal:#
 	#############################################################################
 	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance.
-	Mv_0=Mv_lim_dM31+3.78*math.pow(10,-4)*d_M31 
-	alpha_0=alpha_lim_dM31+4.65*math.pow(10,-4)*d_M31
+	Mv_0=Mv_lim_dM31+4.29*math.pow(10,-4)*d_M31 
+	alpha_0=alpha_lim_dM31+3.04*math.pow(10,-4)*d_M31
 	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance of the galaxy d_gal
 	Mv_lim_dgal=-3.78*math.pow(10,-4)*d_gal+Mv_0
-	alpha_lim_dgal=-4.65*math.pow(10,-4)*d_gal+alpha_0
+	alpha_lim_dgal=-3.04*math.pow(10,-4)*d_gal+alpha_0
 	
 	#######################################
 	#Determining the detection efficiency:#

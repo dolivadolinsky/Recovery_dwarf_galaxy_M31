@@ -50,7 +50,7 @@ def radec_xkieta(ra,dec,ra_ref,dec_ref):
 	return(xki,eta)
 	
 def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
-	""" Function which determines the detection of a list of galaxies. The function takes array like inputs which are the right ascension and declination of the galaxy (rad), the distance of the galaxy (kpc), the absolute magnitude of the galaxy in the V-band and the half-light radius of the galaxy in pc. The output contains two arrays. The first corresponds to the detection or non-detection of a galaxy, 0 means the galaxy is not detected, 1 means the galaxy is detected. The second brings precision on the position of the dwarf galaxy. Indeed, if the galaxy is not in the survey, in a hole of the survey or in a field where detection limits are not calculated, it is considered non-detected. The second array contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy in a masked field and 3 if the galaxy is in a hole of the survey. """
+	""" Function which determines the recovery fraction of a list of dwarf galaxies in the PAndAS survey. The function takes array like inputs which are the right ascension and declination of the galaxy (rad), the distance of the galaxy (kpc), the absolute magnitude of the galaxy in the V-band and the half-light radius of the galaxy in pc. The output contains three arrays. The first corresponds to the detection or non-detection of a galaxy, 0 means the galaxy is not detected, 1 means the galaxy is detected. the second is the recovery rates of the dwarf galaxies with similar properties. The third brings precision on the position of the dwarf galaxy. Indeed, if the galaxy is not in the survey, in a hole of the survey or in a field where detection limits are not calculated, it is considered non-detected. The second array contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy is in a masked field and 3 if the galaxy is in a hole of the survey. """
 	
 	ra_gal,dec_gal,d_gal,Mv_gal,rh_gal=np.array(ra_gal),np.array(dec_gal),np.array(d_gal),np.array(Mv_gal),np.array(rh_gal)
 	
@@ -129,7 +129,8 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	detection=np.where(eff_rand<efficiency,1,0) #if eff_rand<efficiency the galaxy is detected, else it is not
 	detection=np.where(Mv_lim_dM31<1000,detection,0) #if the galaxy is not in a PAndAS field or is in a field where the recovery fractions were not calculated then the value of detection is 0
 	position=np.where(Mv_lim_dM31==1000000,2,position) #If the galaxy is in a masked field, the position value is 2
+	efficiency=np.where(position==1,efficiency,0)
 	
-	return(detection,position)
+	return(detection,efficiency,position)
 	
 	

@@ -64,6 +64,7 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	field_center_xkieta=np.loadtxt('field_middle_xkieta.dat')
 	#File which contains the value of the model parameter in function of the field:
 	parameters=np.loadtxt('parameters2.txt') 
+	i_depth=np.loadtxt('fields_lim_new.csv',delimiter=',')[:,2]
 	#Right ascension and Declination in radian of M31:
 	ra_refc,dec_refc=0.18648115837037746,0.7202828378876265
 	
@@ -91,13 +92,19 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 			etamax=flimeta[0][0]*xki_gal[j]+flimeta[0][1]
 			etamin=flimeta[1][0]*xki_gal[j]+flimeta[1][1]
 			#Testing if the point is in the field which number is label_tmp[i].
-			if (xki_gal[j]<xkimax)&(xki_gal[j]>xkimin)&(eta_gal[j]<etamax)&(eta_gal[j]>etamin):
+			
+			if (xki_gal[j]<xkimax)&(xki_gal[j]>xkimin)&(eta_gal[j]<etamax)&(eta_gal[j]>etamin)&(Mv_lim_dM31[j]==10000):
 				#If the galaxy is in the field, the number of the field and the model parameters value for this field are changed in the arrays created above. 
 				champ[j]=int(label_tmp[i])
 				# If the galaxy fall in a field where the recovery fractions are determined then the value of the parameters is stored in Mv_lim_dM31, alpha_lim_dM31, sigma. If the galaxy fall in a field where the recovery fractions are not calculated then the values of the parameters is 1000000. 
 				Mv_lim_dM31[j],alpha_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
-				break
-		#If the galaxy in not in a field of the survey, it test if it is in a hole or out of the survey.
+			if (xki_gal[j]<xkimax)&(xki_gal[j]>xkimin)&(eta_gal[j]<etamax)&(eta_gal[j]>etamin)&(Mv_lim_dM31[j]!=10000):
+			#If the galaxy is inbetween two fields, the parameters for the deepest fields in the i-band are taken. 
+				if i_depth[int(label_tmp[i])-1]>i_depth[int(champ[j])-1]:
+					champ[j]=int(label_tmp[i])
+					Mv_lim_dM31[j],alpha_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
+				
+		#If the galaxy is not in a field of the survey, it test if it is in a hole or out of the survey.
 		if Mv_lim_dM31[j]==10000:
 			if inPoly(xki_gal[j],eta_gal[j])==1: position[j]=3 #If the galaxy is in a hole, the position value is 3
 			else: position[j]=0 #If the galaxy is not in the survey, the position value is 0
@@ -107,11 +114,11 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#Determining the model parameters value at the distance of the galaxy d_gal:#
 	#############################################################################
 	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance.
-	Mv_0=Mv_lim_dM31+4.29*math.pow(10,-4)*d_M31 
-	alpha_0=alpha_lim_dM31+3.04*math.pow(10,-4)*d_M31
+	Mv_0=Mv_lim_dM31+3.78*math.pow(10,-4)*d_M31 
+	alpha_0=alpha_lim_dM31+4.65*math.pow(10,-4)*d_M31
 	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance of the galaxy d_gal
 	Mv_lim_dgal=-3.78*math.pow(10,-4)*d_gal+Mv_0
-	alpha_lim_dgal=-3.04*math.pow(10,-4)*d_gal+alpha_0
+	alpha_lim_dgal=-4.65*math.pow(10,-4)*d_gal+alpha_0
 	
 	#######################################
 	#Determining the detection efficiency:#

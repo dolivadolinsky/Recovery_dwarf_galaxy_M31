@@ -7,7 +7,7 @@ The script is named "detection_dwarf_galaxy_M31.py". It contains a function "det
 
 The file "parameters2.txt" contains the number of the PAndAS field, the center of the field in the tangent plane rectangular coordinates (deg) and the corresponding recovery fractions model parameters if the dwarf galaxies are at the distance of M31. 
 
-The file "field_corners.dat" and "field_middle_xkieta.dat" contain, respectively the coordinates of the corner of each PAndAS field in the tangent plane rectangular coordinates (deg) and the coordinates of the center of each PAndAS field in the tangent plane rectangular coordinates (deg). 
+The file "field_corners.dat", "field_middle_xkieta.dat" and "fields_lim_mew.csv" contain, respectively the coordinates of the corner of each PAndAS field in the tangent plane rectangular coordinates (deg), the coordinates of the center of each PAndAS field in the tangent plane rectangular coordinates (deg) and the i-depth of each field. 
 
 The file "example.py" presents a small example on how to use the module. 
 

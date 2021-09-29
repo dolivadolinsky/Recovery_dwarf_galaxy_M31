@@ -1,9 +1,9 @@
 # Recovery_dwarf_galaxy_M31
 
-This directory contains a script which from a list of properties of dwarf galaxies return their detection\non-detection and the probability that such dwarf galaxies would have been discovered in PAndAS. It using the recovery fraction model described in Doliva-Dolinsky and al, 2021.
+This directory contains a script which from a list of properties of dwarf galaxies returns the probability that such dwarf galaxies would have been discovered in PAndAS. The recovery fraction model described in Doliva-Dolinsky and al (2021) is used.
 
 # Content: 
-The script is named "detection_dwarf_galaxy_M31.py". It contains a function "detection_dwarf_galaxy" which takes in input a list of right ascension (rad), a list of declination (rad), a list of distance (kpc), a list of absolute magnitude in the V-band and a list of half-light radius (pc). It returns a list of 1, 0 which correspond, respectively, to the galaxy is detected or to the galaxy is not detected. The second output is an array of the recovery rates. It also returns an array which contains an information on the position of the galaxies. Its value is 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy is in a masked field and 3 if the galaxy is in a hole of the survey.
+The script is named "detection_dwarf_galaxy_M31.py". It contains a function "detection_dwarf_galaxy" which takes in input a list of right ascension (rad), a list of declination (rad), a list of distance (kpc), a list of absolute magnitude in the V-band and a list of half-light radius (pc). It returns, in a first array, the recovery rates of such galaxies. It also returns, in a second array, an information on the position of the galaxies. Its value is 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy is in a masked field and 3 if the galaxy is in a hole of the survey.
 
 The file "parameters2.txt" contains the number of the PAndAS field, the center of the field in the tangent plane rectangular coordinates (deg) and the corresponding recovery fractions model parameters if the dwarf galaxies are at the distance of M31. 
 

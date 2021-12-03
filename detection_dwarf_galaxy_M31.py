@@ -50,7 +50,7 @@ def radec_xkieta(ra,dec,ra_ref,dec_ref):
 	return(xki,eta)
 	
 def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
-	""" Function which determines the recovery fraction of a list of dwarf galaxies in the PAndAS survey. The function takes array like inputs which are the right ascension and declination of the galaxy (rad), the distance of the galaxy (kpc), the absolute magnitude of the galaxy in the V-band and the half-light radius of the galaxy in pc. The output contains two arrays. The first is the recovery rates of the dwarf galaxies with similar properties. The second brings precision on the position of the dwarf galaxy. Indeed, if the galaxy is not in the survey, in a hole of the survey or in a field where detection limits are not calculated, it is considered non-detected. The second array contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy is in a masked field and 3 if the galaxy is in a hole of the survey. """
+	""" Function which determines the recovery fraction of a list of dwarf galaxies in the PAndAS survey. The function takes array like inputs which are the right ascension and declination of the galaxy (rad), the distance modulus of the galaxy, the absolute magnitude of the galaxy in the V-band and the half-light radius of the galaxy in pc. The output contains two arrays. The first is the recovery rates of the dwarf galaxies with similar properties. The second brings precision on the position of the dwarf galaxy. Indeed, if the galaxy is not in the survey, in a hole of the survey or in a field where detection limits are not calculated, it is considered non-detected. The second array contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy is in a masked field and 3 if the galaxy is in a hole of the survey. """
 	
 	ra_gal,dec_gal,d_gal,Mv_gal,rh_gal=np.array(ra_gal),np.array(dec_gal),np.array(d_gal),np.array(Mv_gal),np.array(rh_gal)
 	
@@ -75,7 +75,7 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	xki_gal,eta_gal=np.array(radec_xkieta(ra_gal,dec_gal,ra_refc,dec_refc))*180/math.pi #Array which contains the xki/eta coordinates of each galaxy.
 	label=field_center_xkieta[:,0] #Array which contains all the fields number from 1 to 406.
 	position=np.zeros(len(xki_gal))+1 #Array which contains 0 if the galaxy is not in the survey, 1 if it is in a field of the survey where the recovery fraction were calculated, 2 if the galaxy in a masked field and 3 of the galaxy is in a hole of the survey.
-	d_M31=math.pow(10,(24.47+5)/5)/1000
+	d_M31=24.47
 	
 	for j in range(0,len(xki_gal)):
 		if j%100==0: print('Finding the model parameters: %d/%d'%(j,len(xki_gal)))
@@ -113,19 +113,18 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#############################################################################			
 	#Determining the model parameters value at the distance of the galaxy d_gal:#
 	#############################################################################
-	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance.
-	Mv_0=Mv_lim_dM31+3.78*math.pow(10,-4)*d_M31 
-	alpha_0=alpha_lim_dM31+4.65*math.pow(10,-4)*d_M31
-	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance of the galaxy d_gal
-	Mv_lim_dgal=-3.78*math.pow(10,-4)*d_gal+Mv_0
-	alpha_lim_dgal=-4.65*math.pow(10,-4)*d_gal+alpha_0
+	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance modulus .
 	
+	Mv_0=Mv_lim_dM31+0.93*d_M31 
+	alpha_0=alpha_lim_dM31-0.07*d_M31
+	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance modulus of the galaxy d_gal
+	Mv_lim_dgal=-0.93*d_gal+Mv_0
+	alpha_lim_dgal=0.07*d_gal+alpha_0
 	#######################################
 	#Determining the detection efficiency:#
 	#######################################
-	rhlim=1.8 #Value of the log(rh) at mv=Mv_lim_dgal
-	rh0=rhlim-Mv_lim_dgal*alpha_lim_dgal 
-	beta=special.erfc((Mv_gal-((np.log10(rh_gal)-rh0)/alpha_lim_dgal))/(math.sqrt(2)*sigma))
+	Mvlim=alpha_lim_dgal*np.power(np.log10(rh_gal),2)+Mv_lim_dgal
+	beta=special.erfc((Mv_gal-Mvlim)/(math.sqrt(2)*sigma))
 	efficiency=0.5*beta
 	position=np.where(Mv_lim_dM31==1000000,2,position) #If the galaxy is in a masked field, the position value is 2
 	efficiency=np.where(position==1,efficiency,0)

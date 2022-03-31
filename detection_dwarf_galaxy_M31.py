@@ -114,15 +114,16 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#Determining the model parameters value at the distance of the galaxy d_gal:#
 	#############################################################################
 	#Mv_0 and alpha_0 are the intercepts of the straight line describing the variation of the parameters with the distance modulus .
-	Mv_0=Mv_lim_dM31+0.79*d_M31 
-	alpha_0=alpha_lim_dM31+0.06*d_M31
+	Mv_0=Mv_lim_dM31+0.84*d_M31 
+	alpha_0=alpha_lim_dM31+0.08*d_M31
 	#Mv_lim_dgal and alpha_lim_dgal are the model parameters value at the distance modulus of the galaxy d_gal
-	Mv_lim_dgal=-0.79*d_gal+Mv_0
-	alpha_lim_dgal=-0.06*d_gal+alpha_0
+	Mv_lim_dgal=-0.84*d_gal+Mv_0
+	alpha_lim_dgal=-0.08*d_gal+alpha_0
 	#######################################
 	#Determining the detection efficiency:#
 	#######################################
-	Mvlim=alpha_lim_dgal*np.log10(rh_gal)+Mv_lim_dgal
+	rho=1.8-alpha_lim_dgal*Mv_lim_dgal
+	Mvlim=(np.log10(rh_gal)-rho)/alpha_lim_dgal
 	beta=special.erfc((Mv_gal-Mvlim)/(math.sqrt(2)*sigma))
 	efficiency=0.5*beta
 	position=np.where(Mv_lim_dM31==1000000,2,position) #If the galaxy is in a masked field, the position value is 2

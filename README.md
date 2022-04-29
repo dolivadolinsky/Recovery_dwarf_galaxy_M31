@@ -12,7 +12,7 @@ The file "field_corners.dat", "field_middle_xkieta.dat" and "fields_lim_mew.csv"
 The file "example.py" presents a small example on how to use the module. 
 
 # Principle:
-The module first determines the fields in which the input dwarf galaxy would be located or if it is outside the PAndAS footprint. The parameters of the linear model described in Doliva-Dolinsky et al (2021), Mv_lim, α and σ are obtained for the field in which the galaxy is and for a distance of the galaxy equal to the one of M31.  Then, the relations described in Doliva-Dolinsky et al (2022), are used in order to determine the values of Mv_lim and α at the galaxy’s distance. Once the detection efficiencies are obtained, an acceptance/rejection method is used to decide if the galaxy is detected or not.
+The module first determines the fields in which the input dwarf galaxy would be located or if it is outside the PAndAS footprint. The parameters of the quadratic model described in Doliva-Dolinsky et al (2022), a, b and σ are obtained for the field in which the galaxy is and for a distance of the galaxy equal to the one of M31.  Then, the relations described in Doliva-Dolinsky et al (2022), are used in order to determine the values of a and b at the galaxy’s distance. Once the detection efficiencies are obtained, an acceptance/rejection method is used to decide if the galaxy is detected or not.
 
 # Requirement:
 The module was tested with Python 3.8.3 and the associate math and random module. It is also using numpy 1.19.5 and scipy 1.5.0. 

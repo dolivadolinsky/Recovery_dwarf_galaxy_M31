@@ -97,12 +97,12 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 				#If the galaxy is in the field, the number of the field and the model parameters value for this field are changed in the arrays created above. 
 				champ[j]=int(label_tmp[i])
 				# If the galaxy fall in a field where the recovery fractions are determined then the value of the parameters is stored in Mv_lim_dM31, alpha_lim_dM31, sigma. If the galaxy fall in a field where the recovery fractions are not calculated then the values of the parameters is 1000000. 
-				Mv_lim_dM31[j],alpha_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
+				alpha_lim_dM31[j],Mv_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
 			if (xki_gal[j]<xkimax)&(xki_gal[j]>xkimin)&(eta_gal[j]<etamax)&(eta_gal[j]>etamin)&(Mv_lim_dM31[j]!=10000):
 			#If the galaxy is inbetween two fields, the parameters for the deepest fields in the i-band are taken. 
 				if i_depth[int(label_tmp[i])-1]>i_depth[int(champ[j])-1]:
 					champ[j]=int(label_tmp[i])
-					Mv_lim_dM31[j],alpha_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
+					alpha_lim_dM31[j],Mv_lim_dM31[j],sigma[j]=parameters[int(champ[j]-1)][3],parameters[int(champ[j]-1)][4],parameters[int(champ[j]-1)][5]
 				
 		#If the galaxy is not in a field of the survey, it test if it is in a hole or out of the survey.
 		if Mv_lim_dM31[j]==10000:
@@ -122,7 +122,7 @@ def detection_dwarf_galaxy(ra_gal,dec_gal,d_gal,Mv_gal,rh_gal):
 	#######################################
 	#Determining the detection efficiency:#
 	#######################################
-	Mvlim=alpha_lim_dgal*np.log10(rh_gal)+Mv_lim_dgal
+	Mvlim=alpha_lim_dgal*np.log10(rh_gal)*np.log10(rh_gal)+Mv_lim_dgal
 	beta=special.erfc((Mv_gal-Mvlim)/(math.sqrt(2)*sigma))
 	efficiency=0.5*beta
 	position=np.where(Mv_lim_dM31==1000000,2,position) #If the galaxy is in a masked field, the position value is 2
